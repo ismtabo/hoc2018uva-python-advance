@@ -18,12 +18,19 @@
 
 	<main role="main" class="container">
 		<div class="starter-template">
-			{% if name %}
-			<h1>Hello {{ name }}!</h1>
-			{% else %}
-			<h1>Hello, World!</h1>
-			{% endif %}
-		</div>
+			<h1>Guestbook:</h1>
+			<div class="list-group">
+			  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+				<div class="d-flex w-100">
+				  <h5 class="mb-1">{{ comment[0] }}</h5>
+				</div>
+				<p class="mb-1">{{ comment[1] }}</p>
+				<div class="d-flex flex-row justify-content-end">
+					<small class="mb-1">{{ comment[2] }}</small>
+				</div>
+			</a>
+			</div>
+		  </div>
 	</main>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

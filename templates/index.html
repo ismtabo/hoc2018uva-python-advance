@@ -9,7 +9,7 @@
 	<link href="{{ url_for('static', filename='css/starter-template.css') }}" rel="stylesheet">
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	{{ moment.include_jquery() }}
-    {{ moment.include_moment() }}
+	{{ moment.include_moment() }}
 </head>
 
 <body>
@@ -21,7 +21,7 @@
 	<main role="main" class="container">
 		<div class="starter-template">
 			<h1>Guestbook:</h1>
-			<div class="list-group">
+			<div class="list-group comment-list">
 				{% for comment in comments %}
 				<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
 					<div class="d-flex w-100 justify-content-between">
@@ -34,6 +34,23 @@
 					</div>
 				</a>
 				{% endfor %}
+			</div>
+			<div class="comment-form">
+				<form method="POST">
+					<div class="form-group">
+						<label for="author">Author</label>
+						<input type="author" class="form-control" id="author" name="author" placeholder="Author" required>
+					</div>
+					<div class="form-group">
+						<label for="title">Title</label>
+						<input type="title" class="form-control" id="title" name="title" placeholder="Title" required>
+					</div>
+					<div class="form-group">
+						<label for="content">Example textarea</label>
+						<textarea class="form-control" id="content" name="content" rows="3" placeholder="Content" required></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary push-right">Submit</button>
+				</form>
 			</div>
 		</div>
 	</main>

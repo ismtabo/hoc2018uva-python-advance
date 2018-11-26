@@ -8,3 +8,7 @@ flask = "*"
 python-dotenv = "*"
 
 [dev-packages]
+pylint = "*"
+"autopep8" = "*"
+rope = "*"
+mypy = "*"

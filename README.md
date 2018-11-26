@@ -1,4 +1,4 @@
-# Hour of code 2018 - Pybbo: Flask ♡ Vuejs
+# Hour of code 2018 - Pybbo: Flask ♥️ Vuejs
 
 Sample of simple web service using Python3 with Flask, Peewee and Telepot for Hour of Code of 2017.
 
@@ -103,9 +103,10 @@ In case, you want to advance in the tutorial but you already have done changes i
 $ git stash save --keep-index # Add changes to stash
 $ git stash drop              # Discard stash
 ```
-Ànd then, checkout correct step's tag.
+And then, checkout correct step's tag.
 
 
 Contributors
 ---
 - Ismael Taboada: [ismtabo](https://github.com/ismtabo)
+- Carlos Gómez: [kurolox](https://github.com/kurolox)

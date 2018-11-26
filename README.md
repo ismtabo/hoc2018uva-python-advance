@@ -1,6 +1,5 @@
 # Hour of code 2018 - Pybbo: Flask ♥️ Vuejs
 
-Sample of simple web service using Python3 with Flask, Peewee and Telepot for Hour of Code of 2017.
 This is a sample of a simple social network made in Python using Flask, Vue, Peewee and SocketIO made for the [Hour of Code 2018.](http://eventos.uva.es/27587/detail/la-hora-del-codigo-2018.html)
 
 ## How to follow this tutorial

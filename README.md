@@ -92,7 +92,7 @@ This sample is dividen in three different parts:
 
 ## Getting started into the tutorial
 
-The tags below are used to identify the different tutorial steps, you can see them at: https://github.com/ismtabo/hoc2017uva-python3/releases
+The tags below are used to identify the different tutorial steps, you can see them at: https://github.com/ismtabo/hoc2018uva-python-advance/releases
 
 To jump between the tutorial parts, checkout the tag using the command below:
 ```

@@ -7,6 +7,9 @@ name = "pypi"
 flask = "*"
 python-dotenv = "*"
 flask-moment = "*"
+flask-socketio = "*"
+gevent = "*"
+gevent-websocket = "*"
 
 [dev-packages]
 pylint = "*"

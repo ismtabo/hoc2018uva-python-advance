@@ -1,64 +1,34 @@
-const socket = io();
-
 Vue.config.devtools = true;
 
-var app = new Vue({
-	el: "#app",
+Vue.prototype.$http = axios;
+const token = localStorage.getItem('token');
+if (token) {
+	Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
+
+new Vue({
+	router,
+	store,
 	delimiters: ["[[", "]]"],
-	data: {
-		users: 0,
-		comments: [],
-		author: "",
-		title: "",
-		content: ""
-	},
-	created() {
-		axios.get("/comments", {
-			author: document.getElementById("author").value,
-			title: document.getElementById("title").value,
-			content: document.getElementById("content").value
-		}).then((response) => {
-			this.comments = response.data.comments;
-		}).catch((error) => {
-			console.error(error);
-		});
-
-		socket.on("new connection", (data) => {
-			this.users = data.users;
-		});
-
-		socket.on("new disconnection", (data) => {
-			this.users = data.users;
-		});
-
-		socket.on("new comment", (data) => {
-			this.comments.push(data.comment);
-		});
+	computed: {
+		isLoggedIn: function () { return this.$store.getters.isLoggedIn }
 	},
 	methods: {
-		onSubmitComment(event) {
-			axios.post("/comments", {
-				author: this.author,
-				title: this.title,
-				content: this.content
-			}).then(() => {
-				this.resetForm();
-				event.target.reset();
-				toastr.success("Your comment has been submited.", "Great!", {
-					timeOut: 5000
-				});
-			}).catch((error) => {
-				toastr.error("Your comment has not been submited.", "Warning!", {
-					timeOut: 5000
-				});
-				console.error(error);
-			});
-
-		},
-		resetForm() {
-			this.author = '';
-			this.title = '';
-			this.content = '';
+		logout() {
+			this.$store.dispatch('logout')
+				.then(() => {
+					this.$router.push('/login')
+				}).catch(err => console.error(err));
 		}
+	},
+	created: function () {
+		this.$http.interceptors.response.use(undefined, function (err) {
+			return new Promise(function (resolve, reject) {
+				if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+					this.$store.dispatch(logout)
+				}
+				throw err;
+			});
+		});
 	}
-});
+}).$mount('#app');

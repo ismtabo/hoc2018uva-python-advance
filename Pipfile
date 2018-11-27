@@ -10,6 +10,9 @@ flask-socketio = "*"
 gevent = "*"
 gevent-websocket = "*"
 peewee = "*"
+flask-jwt-extended = "*"
+flask-login = "*"
+flask-cors = "*"
 
 [dev-packages]
 pylint = "*"

@@ -30,9 +30,9 @@ def on_comments():
 
         comment = db.create_comment(title, content, author)
         socketio.emit('new comment', {
-                      'comment': comment}, broadcast=True)
+                      'comment': comment._asdict()}, broadcast=True)
 
-        return json.dumps({'comment': comment})
+        return json.dumps({'comment': comment._asdict()})
 
     comments = db.get_comments()
 

@@ -5,6 +5,7 @@
 	<title>Pybbo</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.slim.js"></script>
 	<!-- Custom styles for this template -->
 	<link href="{{ url_for('static', filename='css/starter-template.css') }}" rel="stylesheet">
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -34,6 +35,9 @@
 					</div>
 				</a>
 				{% endfor %}
+				<div class="list-group-item list-group-item-action d-flex justify-content-end">
+					<small>Users connected <span id="users">0</span></small>
+				</div>
 			</div>
 			<div class="comment-form">
 				<form method="POST">
@@ -54,6 +58,24 @@
 			</div>
 		</div>
 	</main>
+
+	<script>
+		const socket = io();
+
+		function update_users(users) {
+			document.getElementById('users').innerHTML = ''+users;
+		}
+
+		socket.on('new connection', function(data) {
+			update_users(data.users);
+			console.log('new connection');
+		});
+
+		socket.on('new disconnection', function(data) {
+			update_users(data.users);
+			console.log('new disconnection');
+		});
+	</script>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	 crossorigin="anonymous"></script>

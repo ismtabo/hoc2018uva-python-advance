@@ -1,20 +1,13 @@
-from datetime import datetime
-from collections import namedtuple
-
-from flask import Flask, render_template, request, json
+from flask import Flask, json, render_template, request
 from flask_socketio import SocketIO, emit, socketio
+
+import database as db
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, json=json)
 
-Comment = namedtuple('Comment', ['title', 'content', 'author', 'datetime'])
-comments = [
-    Comment("First comment", "This page isn't bad at all.",
-            "Author 1", datetime(year=2017, month=12, day=1)),
-    Comment("Second comment", "Yeah, I really like it.",
-            "Author 2", datetime.utcnow()),
-]
 users_connected = 0
 
 
@@ -35,14 +28,15 @@ def on_comments():
             title = request.get_json().get('title')
             content = request.get_json().get('content')
 
-        comment = Comment(title, content, author, datetime.utcnow())
-        comments.append(comment)
+        comment = db.create_comment(title, content, author)
         socketio.emit('new comment', {
-                      'comment': comment._asdict()}, broadcast=True)
+                      'comment': comment}, broadcast=True)
 
-        return json.dumps({'comment': comment._asdict()})
+        return json.dumps({'comment': comment})
 
-    return json.dumps({'comments': [comment._asdict() for comment in comments]})
+    comments = db.get_comments()
+
+    return json.dumps({'comments': [comment for comment in comments]})
 
 
 @socketio.on('connect')

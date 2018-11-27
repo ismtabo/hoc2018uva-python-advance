@@ -9,6 +9,8 @@ python-dotenv = "*"
 flask-socketio = "*"
 gevent = "*"
 gevent-websocket = "*"
+tinydb = "*"
+tinydb-serialization = "*"
 
 [dev-packages]
 pylint = "*"

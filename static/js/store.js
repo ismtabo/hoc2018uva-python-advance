@@ -12,10 +12,10 @@ const store = new Vuex.Store({
 		auth_request(state) {
 			state.status = 'loading'
 		},
-		auth_success(state, token, user) {
+		auth_success(state, payload) {
 			state.status = 'success'
-			state.token = token
-			state.user = user
+			state.token = payload.token
+			state.user = payload.user
 		},
 		auth_error(state) {
 			state.status = 'error'
@@ -31,13 +31,11 @@ const store = new Vuex.Store({
 				commit('auth_request');
 				axios({ url: '/auth/login', data: _user, method: 'POST' })
 					.then(resp => {
-						debugger;
 						const token = resp.data.token;
 						const user = resp.data.user;
 						localStorage.setItem('token', token);
 						axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-						commit('auth_success', token, user);
-						debugger;
+						commit('auth_success', {token, user});
 						resolve(resp);
 					})
 					.catch(err => {
@@ -56,7 +54,7 @@ const store = new Vuex.Store({
 						const user = resp.data.user;
 						localStorage.setItem('token', token);
 						axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-						commit('auth_success', token, user);
+						commit('auth_success', {token, user});
 						resolve(resp);
 					})
 					.catch(err => {

@@ -1,14 +1,14 @@
 from datetime import datetime
 from collections import namedtuple
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, json
 from flask_moment import Moment
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, socketio
 app = Flask(__name__)
 moment = Moment(app)
 
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, json=json)
 
 Comment = namedtuple('Comment', ['title', 'content', 'author', 'datetime'])
 comments = [
@@ -26,7 +26,9 @@ def index():
         author = request.form.get('author')
         title = request.form.get('title')
         content = request.form.get('content')
-        comments.append(Comment(title, content, author, datetime.utcnow()))
+        comment = Comment(title, content, author, datetime.utcnow())
+        comments.append(comment)
+        socketio.emit('new comment', {'comment': comment._asdict()}, broadcast=True)
 
     return render_template('index.html', comments=comments)
 

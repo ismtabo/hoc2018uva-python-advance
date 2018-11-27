@@ -11,10 +11,6 @@
 		<!-- Toastr css -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
-		<!-- Momentjs -->
-		{{ moment.include_jquery() }}
-		{{ moment.include_moment() }}
-
 		<!-- Custom styles for this template -->
 		<link href="{{ url_for('static', filename='css/starter-template.css') }}" rel="stylesheet">
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -31,18 +27,6 @@
 				<h1>Guestbook:</h1>
 				<span class="d-flex justify-content-end"><small>Users connected <span id="users">0</span></small></span>
 				<div class="list-group comment-list" id="comment-list">
-					{% for comment in comments %}
-					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">{{ comment.title }}</h5>
-							<small class="mb-1">{{ comment.author }}</small>
-						</div>
-						<p class="mb-1">{{ comment.content }}</p>
-						<div class="d-flex flex-row justify-content-end">
-							<small class="mb-1">{{ moment(comment.datetime).fromNow() }}</small>
-						</div>
-					</a>
-					{% endfor %}
 				</div>
 				<div class="comment-form">
 					<form method="POST" id="comment-form">
@@ -65,12 +49,17 @@
 		</main>
 
 
+		<!-- Momentjs -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
 		<!-- Socketio -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.slim.js"></script>
+
 		<!-- Axios -->
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 		<!-- Toastr -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 		<script src="{{ url_for('static', filename='js/main.js') }}"></script>

@@ -2,10 +2,8 @@ from datetime import datetime
 from collections import namedtuple
 
 from flask import Flask, render_template, request, json
-from flask_moment import Moment
 from flask_socketio import SocketIO, emit, socketio
 app = Flask(__name__)
-moment = Moment(app)
 
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, json=json)
@@ -20,23 +18,39 @@ comments = [
 users_connected = 0
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
+    return render_template('index.html')
+
+
+@app.route('/comments', methods=['GET', 'POST'])
+def on_comments():
     if request.method == 'POST':
-        author = request.form.get('author')
-        title = request.form.get('title')
-        content = request.form.get('content')
+        if not request.is_json:
+            author = request.form.get('author')
+            title = request.form.get('title')
+            content = request.form.get('content')
+        else:
+            author = request.get_json().get('author')
+            title = request.get_json().get('title')
+            content = request.get_json().get('content')
+
         comment = Comment(title, content, author, datetime.utcnow())
         comments.append(comment)
-        socketio.emit('new comment', {'comment': comment._asdict()}, broadcast=True)
+        socketio.emit('new comment', {
+                      'comment': comment._asdict()}, broadcast=True)
 
-    return render_template('index.html', comments=comments)
+        return json.dumps({'comment': comment._asdict()})
+
+    return json.dumps({'comments': [comment._asdict() for comment in comments]})
+
 
 @socketio.on('connect')
 def socket_connect():
     global users_connected
     users_connected += 1
     emit('new connection', {'users': users_connected}, broadcast=True)
+
 
 @socketio.on('disconnect')
 def socket_disconnect():

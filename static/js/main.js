@@ -1,5 +1,16 @@
 const socket = io();
 
+axios.get('/comments', {
+	author: document.getElementById('author').value,
+	title: document.getElementById('title').value,
+	content: document.getElementById('content').value
+}).then(function (response) {
+	let comments = response.data.comments;
+	for (let comment of comments) {
+		add_comment(comment);
+	}
+})
+
 function update_users(users) {
 	document.getElementById('users').innerHTML = '' + users;
 }
@@ -34,3 +45,21 @@ function add_comment(comment) {
 
 	comment_list.insertBefore(li, users_span);
 }
+
+document.getElementById('comment-form').addEventListener('submit',
+	function (event) {
+		axios.post('/comments', {
+			author: document.getElementById('author').value,
+			title: document.getElementById('title').value,
+			content: document.getElementById('content').value
+		}).then(function (response) {
+			document.getElementById('comment-form').reset();
+			toastr.success('Your comment has been submited.', 'Great!', { timeOut: 5000 });
+		}).catch(function (error) {
+			toastr.error('Your comment has not been submited.', 'Warning!', { timeOut: 5000 });
+			console.error(error);
+		});
+
+		event.preventDefault();
+	}
+);

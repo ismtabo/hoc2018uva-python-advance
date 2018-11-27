@@ -4,8 +4,6 @@ import os
 
 from flask import json, current_app
 from flask.cli import AppGroup, with_appcontext
-from tinydb import TinyDB
-from tinydb_serialization import SerializationMiddleware, Serializer
 from peewee import Model, CharField, TextField, DateTimeField
 from playhouse.shortcuts import model_to_dict
 from playhouse.db_url import connect

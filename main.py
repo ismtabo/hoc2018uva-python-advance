@@ -11,6 +11,20 @@ socketio = SocketIO(app, json=json)
 users_connected = 0
 
 
+@app.before_request
+def before_request():
+    db.database.connect(reuse_if_open=True)
+
+
+@app.after_request
+def after_request(response):
+    if not db.database.is_closed():
+        db.database.close()
+    return response
+
+app.cli.add_command(db.database_cli)
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -30,9 +44,9 @@ def on_comments():
 
         comment = db.create_comment(title, content, author)
         socketio.emit('new comment', {
-                      'comment': comment._asdict()}, broadcast=True)
+                      'comment': comment}, broadcast=True)
 
-        return json.dumps({'comment': comment._asdict()})
+        return json.dumps({'comment': comment})
 
     comments = db.get_comments()
 

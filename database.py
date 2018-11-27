@@ -1,41 +1,51 @@
 from collections import namedtuple
 from datetime import datetime
+import os
 
 from flask import json, current_app
+from flask.cli import AppGroup, with_appcontext
 from tinydb import TinyDB
 from tinydb_serialization import SerializationMiddleware, Serializer
+from peewee import Model, CharField, TextField, DateTimeField
+from playhouse.shortcuts import model_to_dict
+from playhouse.db_url import connect
+
+DATABASE = os.getenv('DATABASE') or 'sqlite:///database.db'
+
+database = connect(DATABASE)
+database_cli = AppGroup('database', help='Management operation of the database')
 
 
-class FlaskSerializer(Serializer):
-    OBJ_CLASS = object
-
-    def encode(self, obj):
-        return json.dumps(obj)
-
-    def decode(self, s):
-        return json.loads(s)
+class BaseModel(Model):
+    class Meta:
+        database = database
 
 
-serialization = SerializationMiddleware()
-serialization.register_serializer(FlaskSerializer(), 'TinyFlask')
-
-Comment = namedtuple('Comment', ['title', 'content', 'author', 'datetime'])
-comments = [
-    Comment("First comment", "This page isn't bad at all.",
-            "Author 1", datetime(year=2017, month=12, day=1)),
-    Comment("Second comment", "Yeah, I really like it.",
-            "Author 2", datetime.utcnow()),
-]
-
-db = TinyDB('database.json', storage=serialization)
-comments = db.table('comments')
+class Comment(BaseModel):
+    title = CharField()
+    content = TextField()
+    author = CharField()
+    datetime = DateTimeField()
 
 
 def get_comments():
-    return comments.all()
+    return Comment.select().dicts()
 
 
 def create_comment(title, content, author):
-    comment = Comment(title, content, author, datetime.utcnow())
-    comments.insert(comment._asdict())
-    return comment
+    with database.atomic():
+        comment = Comment(title=title, content=content, author=author, datetime=datetime.utcnow())
+        comment.save()
+    return model_to_dict(comment)
+
+
+@database_cli.command('create', help='Create the tables of the database')
+def create_tables():
+    with database:
+        database.create_tables([Comment])
+
+
+@database_cli.command('drop', help='Drop the tables of the database')
+def drop_tables():
+    with database:
+        database.drop_tables([Comment])

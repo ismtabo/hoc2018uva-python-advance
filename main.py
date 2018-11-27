@@ -2,10 +2,8 @@ from datetime import datetime
 from collections import namedtuple
 
 from flask import Flask, render_template, request, json
-from flask_moment import Moment
 from flask_socketio import SocketIO, emit, socketio
 app = Flask(__name__)
-moment = Moment(app)
 
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, json=json)

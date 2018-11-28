@@ -1,5 +1,5 @@
 {
 	"python.venvPath": "${workspaceFolder}/.venv/",
-	"python.pythonPath": ".venv/bin/python",
+	"python.pythonPath": "C:\\Users\\Concha\\.virtualenvs\\hoc2018uva-python-advance-2vNlWrsv\\Scripts\\python.exe",
 	"python.linting.pylintEnabled": true
 }

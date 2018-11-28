@@ -6,7 +6,7 @@ const store = new Vuex.Store({
 	state: {
 		status: '',
 		token: localStorage.getItem('token') || '',
-		user: {}
+		user: JSON.parse(localStorage.getItem('user') || '{}')
 	},
 	mutations: {
 		auth_request(state) {
@@ -34,6 +34,7 @@ const store = new Vuex.Store({
 						const token = resp.data.token;
 						const user = resp.data.user;
 						localStorage.setItem('token', token);
+						localStorage.setItem('user', JSON.stringify(user));
 						axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 						commit('auth_success', {token, user});
 						resolve(resp);
@@ -53,6 +54,7 @@ const store = new Vuex.Store({
 						const token = resp.data.token;
 						const user = resp.data.user;
 						localStorage.setItem('token', token);
+						localStorage.setItem('user', JSON.stringify(user));
 						axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 						commit('auth_success', {token, user});
 						resolve(resp);

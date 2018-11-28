@@ -1,8 +1,9 @@
+import peewee
 from flask import Flask, json, jsonify, render_template, request
+from flask_cors import CORS
 from flask_jwt_extended import get_jti, get_raw_jwt, jwt_required
 from flask_socketio import SocketIO, emit, socketio
 from playhouse.shortcuts import model_to_dict
-from flask_cors import CORS
 
 import authentication as auth
 import database as db
@@ -95,6 +96,11 @@ def logout():
     jti = get_raw_jwt()['jti']
     auth.logout_user(jti)
     return jsonify({})
+
+
+@app.errorhandler(peewee.IntegrityError)
+def handle_integrity_error(e):
+    return jsonify({'error': 'Bad request'}), 400
 
 
 @socketio.on('connect')

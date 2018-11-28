@@ -6,6 +6,12 @@ if (token) {
 	Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
+Vue.use(Toasted, {
+	iconPack: 'fontawesome',
+	duration: 5000
+});
+Vue.use(bootstrapVue);
+
 new Vue({
 	router,
 	store,
